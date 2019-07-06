@@ -53,12 +53,14 @@ func upsertObjSet(db *gorm.DB, objects []interface{}, excludeColumns ...string) 
 	for _, field := range mainScope.Fields() {
 		_, hasForeignKey := field.TagSettingsGet("FOREIGNKEY")
 		_, isUnique := field.TagSettingsGet("UNIQUE")
+		_, hasUniqueIndex := field.TagSettingsGet("UNIQUE_INDEX")
 		if containString(excludeColumns, field.Struct.Name) ||
 			field.StructField.Relationship != nil ||
 			hasForeignKey ||
 			field.IsIgnored ||
 			field.IsPrimaryKey ||
-			isUnique {
+			isUnique ||
+			hasUniqueIndex {
 			continue
 		}
 
