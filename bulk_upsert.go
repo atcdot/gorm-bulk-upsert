@@ -121,8 +121,10 @@ func extractMapValue(value interface{}, excludeColumns []string) (map[string]int
 		// Exclude relational record because it's not directly contained in database columns
 		_, hasForeignKey := field.TagSettingsGet("FOREIGNKEY")
 
-		if !containString(excludeColumns, field.Struct.Name) && field.StructField.Relationship == nil && !hasForeignKey &&
-			!field.IsIgnored && !(field.DBName == "id" && field.IsPrimaryKey) {
+		if !containString(excludeColumns, field.Struct.Name) &&
+			field.StructField.Relationship == nil &&
+			!hasForeignKey &&
+			!field.IsIgnored {
 			if field.Struct.Name == "CreatedAt" || field.Struct.Name == "UpdatedAt" {
 				attrs[field.DBName] = time.Now()
 			} else if field.StructField.HasDefaultValue && field.IsBlank {
